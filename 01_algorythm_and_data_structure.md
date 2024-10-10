@@ -1,6 +1,16 @@
 https://dl.acm.org/doi/pdf/10.1145/3664191 のp88-90前半
 
 
+# わかってないこと
+- dfsやbfsはO(N+M)では？O(logbN)と書いてあるのは何？
+    - いく先候補としてリストに追加(辺の数N)、もう行ったよとしてリストから削除(ノードの数M)
+- 辞書やsetをハッシュテーブル以外の木などで実装する方法
+- なぜhashの衝突対策のchainは連結リストでやるのか。普通の配列ではダメなのか
+    - →削除するときにO(1)で消せる。(+Pythonは違うけど)配列は固定サイズのメモリを確保して作る言語もあるので勿体無い。
+- ヒープ含や赤黒などの木、ハッシュテーブルの実装をそらで。
+    - 一度手を動かした方が良さそう
+
+
 ## Abstract Data Type
 
 Abstract Data Type (ADT、抽象データ型)は、データとそのデータに対する操作を一つの単位として定義したものです。ADTの主な特徴と利点は以下の通りです：
@@ -1016,15 +1026,112 @@ class PriorityQueue:
 
 
 # tree
+メモ:2分探索木で削除する時は、削除した左下の部分技から最大のノードを削除したところに持ってくる
+
+    Binary、n-ary、search treesについて説明します。
+
+    1. Binary Tree (二分木)
+
+    定義:
+    - 各ノードが最大2つの子ノード（左子と右子）を持つ木構造
+
+    プロパティ:
+    - 各ノードは0、1、または2つの子ノードを持つ
+    - 左子と右子の区別がある
+
+    主な種類:
+    - 完全二分木 (Complete Binary Tree)
+    - 満二分木 (Full Binary Tree)
+    - 完全満二分木 (Perfect Binary Tree)
+
+    ADT操作:
+    - insert(value): 新しい値を挿入
+    - delete(value): 指定した値を削除
+    - search(value): 指定した値を検索
+    - traverse(): 木を走査（in-order, pre-order, post-order）
+
+    2. N-ary Tree (多分木)
+
+    定義:
+    - 各ノードが任意の数の子ノードを持つことができる木構造
+
+    プロパティ:
+    - 子ノードの数に制限がない
+    - 特定のアプリケーションでは子ノードの最大数を制限することもある
+
+    ADT操作:
+    - insert(value, parent): 親ノードに新しい子ノードを追加
+    - delete(node): 指定したノードを削除
+    - search(value): 指定した値を検索
+    - traverse(): 木を走査（深さ優先、幅優先）
+
+    3. Search Tree (探索木)
+
+    定義:
+    - 効率的な検索操作を可能にする順序付けされた木構造
+
+    最も一般的な種類: Binary Search Tree (二分探索木)
+
+    プロパティ:
+    - 左部分木のすべてのノードの値 < ルートノードの値 < 右部分木のすべてのノードの値
+    - この順序関係により、効率的な検索、挿入、削除が可能
+
+    ADT操作:
+    - insert(value): 新しい値を適切な位置に挿入
+    - delete(value): 指定した値を削除し、木の性質を維持
+    - search(value): 指定した値を効率的に検索
+    - min(): 最小値を取得
+    - max(): 最大値を取得
+
+    特徴:
+    - 平均的な検索、挿入、削除の時間複雑度は O(log n)
+    - 最悪の場合（不均衡な木）は O(n)
+
+    バランス探索木:
+    - AVL木、赤黒木などは、常に木のバランスを保つことで最悪の場合でも O(log n) の性能を保証
+
+    これらの木構造は、データの階層的な表現や効率的な検索操作が必要な場合に広く使用されます。具体的な実装や使用するデータ構造は、問題の要件や期待される操作の効率性に基づいて選択されます。
+
+    Citations:
+    [1] https://en.wikipedia.org/?title=Binary_tree
+    [2] https://www.w3schools.com/dsa/dsa_data_binarytrees.php
+    [3] https://www.geeksforgeeks.org/binary-tree-data-structure/
+    [4] https://qiita.com/uniTM/items/324883808a62c6938ac0
+    [5] https://en.wikipedia.org/wiki/Set_(abstract_data_type)
+    [6] https://hostman.com/tutorials/implementing-a-priority-queue-in-python/
+    [7] http://homepage.divms.uiowa.edu/~ghosh/2116.11.pdf
+    [8] https://brilliant.org/wiki/sets-adt/
 
 
+### AVL木
+>AVL木は平衡二分探索木の一種であり、「どのノードについても、それぞれの子を根とする部分木の高さの差(以下、子の高さ)が1以下」という条件がある。なお、子が無い場合は、ここでは便宜上その子の高さは-1とみなす。
+実装においては、左の子の高さと右の子の高さの差を各ノードに記録し、その情報を用いてバランスの調整を行うとよい。
+- https://qiita.com/mikecat_mixc/items/e9f8248de2ae7f7a0a29
+
+### 平衡二分探索木
+平衡二分探索木（へいこうにぶんたんさくぎ、英: self-balancing binary search tree）とは、計算機科学において二分探索木のうち木の高さ（根からの階層の数）を自動的にできるだけ小さく維持しようとするもの（平衡木）である。平衡二分探索木は連想配列や集合その他の抽象データ型を実装する最も効率のよいデータ構造の1つである。
+
+### 赤黒木
+https://qiita.com/kgoto/items/b15b9a494deae010d660
+2-3-4木を二分木として表現したもの
+- https://www.youtube.com/watch?v=DHDKhWoQcNc
+- https://www.youtube.com/watch?v=5IBxA-bZZH8
+- 結構複雑。。
+
+### 2-3-4木
+12345678...みたいに連続したものを木に入れると普通にやると、一直線に右側に並んでしまうので、そうならないように工夫したもの。
+一つのノードに3まで入れて、4つ目が入ろうとしたら、真ん中のやつを上に入れてから、両サイドの二つを別々のノードにして、右側のやつに入れたかった４つ目を入れる。
+- 追加も削除も検索もO(logN)
+- https://www.youtube.com/watch?v=DmnURxpRcf0
+- ![alt text](image.png)
+- 削除は複雑で難しい。→難しいので赤黒木を使う。
 
 
-
-
-
-
-
+### Heap
+- 木構造。一番上に一番小さいのがあり、それを取り出せる。「親が子より小さい数字になる」ようになっている。
+- 追加するときは、右下に追加して、自分が親より小さかった場合、親ノード、祖父ノードと順に入れ替えていく。交換回数は高々木の高さであるlogN
+- 削除(取得)する時は、一番上を取り除いて、右下にあるものを一番上に持っていき、今度は下に下ろすように入れ替えていく。同様にlogN
+- 書籍「アルゴリズム図鑑」がわかりやすい
 
 
 
@@ -1099,3 +1206,42 @@ class PriorityQueue:
     [8] https://www.geeksforgeeks.org/introduction-to-directed-acyclic-graph/
 
 
+# stable sort unstable sort
+    stable sortとunstable sortの主な違いは以下の通りです:
+    ## Stable Sort (安定ソート)
+
+    - 同じキーを持つ要素の相対的な順序が、ソートの前後で保持される[1][2]。
+    - 例えば、`(1,"A"), (3,"D"), (2,"B"), (2,"C")`をソートした場合、結果は`(1,"A"), (2,"B"), (2,"C"), (3,"D")`となる[1]。
+    - 代表的なアルゴリズム:
+    - バブルソート
+    - 挿入ソート
+    - マージソート
+
+    ## Unstable Sort (非安定ソート)
+
+    - 同じキーを持つ要素の相対的な順序が、ソートの過程で変わる可能性がある[1][2]。
+    - 例えば、`(1,"A"), (3,"D"), (2,"B"), (2,"C")`をソートした場合、結果が`(1,"A"), (2,"C"), (2,"B"), (3,"D")`となる可能性がある[1]。
+    - 代表的なアルゴリズム:
+    - クイックソート
+    - ヒープソート
+    - 選択ソート
+
+    ## 重要性
+
+    安定ソートは、複数のキーでソートする場合や、元のデータの順序を保持する必要がある場合に重要です[3]。例えば、学生データを点数順にソートする際、同点の学生の順序を学生番号順に保ちたい場合などに有用です[3]。
+
+    ## 実装の注意点
+
+    不安定なソートアルゴリズムでも、元のデータの順序を追加情報として保持することで、安定ソートとして実装することが可能です[3]。ただし、これには追加のメモリが必要となります。
+
+    安定ソートと非安定ソートの選択は、アプリケーションの要件や扱うデータの性質によって決定されます。データの順序保持が重要な場合は安定ソートを、純粋に効率を重視する場合は非安定ソートを選択することが多いでしょう。
+
+    Citations:
+    [1] https://notes.nakurei.com/post/stable-sort-and-unstable-sort/
+    [2] https://e-words.jp/w/%E5%AE%89%E5%AE%9A%E3%82%BD%E3%83%BC%E3%83%88.html
+    [3] https://ja.wikipedia.org/wiki/%E5%AE%89%E5%AE%9A%E3%82%BD%E3%83%BC%E3%83%88
+    [4] https://judge.u-aizu.ac.jp/onlinejudge/commentary.jsp?filter=Algorithm&id=ALDS1_2_C&pattern=post&type=general
+    [5] https://teratail.com/questions/46475
+    [6] https://qiita.com/nagtkk/items/7ee8f312cd82858d0daa
+    [7] https://docs.ruby-lang.org/ja/latest/method/Enumerable/i/sort.html
+    [8] https://blog.goo.ne.jp/anoydevl/e/6e2b75f040229449451c06720e595913
