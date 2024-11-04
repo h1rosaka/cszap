@@ -119,3 +119,36 @@
     - OKな範囲から適当に点とって、隣点も取って大きかったらそっちを採用する
     - ![alt text](image-25.png)
     - OK範囲は凸になって、内部には答えはない。かつ、この方向に行けばスコアが高くなる、という方向がある
+
+
+#KA core
+
+
+
+# formal recursion alaysis
+![alt text](image-26.png)
+階乗は計算量O(N)
+
+quick sort, merge sort
+![alt text](image-27.png)
+
+## amortized
+配列オブジェクト(dynamic array)の追加が平均してO(1)になる話
+コピーが発生するときは、全部コピーするので要素数に比例する計算(O(N))が発生。
+2^x個までデータ入れるには、２＾x-1(≒２＾x)回のコピーが必要
+1個あたりで平均すると1になる。
+ ![alt text](image-28.png)
+
+
+##
+P:polinominal time 多項式時間
+Exp:2^n とか
+![alt text](image-29.png)
+YesであることのcheckをPでできる問題をNP。NoのチェックはCo-NP
+NPはNon diterministic polinominal
+![alt text](image-31.png)
+![alt text](image-30.png)
+
+Yesになる証拠は、A,B,Cそれぞれ当てはめてYesになる例を1組見つければ良いが、Noの方は全部のパターン検討しないといけない
+![alt text](image-32.png)
+
